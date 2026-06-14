@@ -1,0 +1,8 @@
+# JetBrains WebStorm
+.idea/
+*.iml
+out/
+
+# Visual Studio Code hidden folders
+.vscode/
+.vscode-test/
