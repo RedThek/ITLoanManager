@@ -6,6 +6,7 @@ generator client {
   provider = "prisma-client-js"
   // On déporte la génération dans un autre sous-dossier spécifique
   output   = "../src/generated/mongodb"
+  engineType = "binary"
 }
 
 // Modèle Utilisateur pour l'authentification unifiée

@@ -3,8 +3,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/sqlite"
+  provider   = "prisma-client-js"
+  output     = "../src/generated/sqlite"
+  engineType = "binary"
 }
 
 // Entité Utilisateur (Administrateurs et Étudiants)

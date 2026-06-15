@@ -1,7 +1,5 @@
 import bcrypt from 'bcryptjs';
-import pkg from '../config/db.js';
-
-const { sqlitePrisma, mongodbPrisma } = pkg
+import { sqlitePrisma, mongodbPrisma } from '../config/db.js';
 
 async function main() {
     console.log("Début de l'ensemencement (Seeding) des bases de données...");
