@@ -1,9 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { sqlitePrisma as prisma } from '../config/db.js';
 import { UserRoles } from '../config/constants.js';
-
-const prisma = new PrismaClient();
 
 export const register = async (req, res) => {
     try {

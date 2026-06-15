@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { sqlitePrisma as prisma } from '../config/db.js';
 
 export const EquipmentRepository = {
     // Insertion en base de données via Prisma

@@ -16,3 +16,12 @@ export const createEquipment = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
+
+export const getAllEquipments = async (req, res) => {
+    try {
+        const equipments = await EquipmentService.getAllEquipments();
+        return res.json(equipments);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};

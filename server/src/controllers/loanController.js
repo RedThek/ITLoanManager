@@ -1,8 +1,6 @@
-//import { PrismaClient } from '@prisma/client';
 import { sqlitePrisma } from '../config/db.js';
 import { EquipmentStatus, LoanStatus } from '../config/constants.js';
 
-//const prisma = new PrismaClient();
 
 // 1. L'Étudiant crée une demande (POST /api/loans)
 export const createLoanRequest = async (req, res) => {
@@ -129,6 +127,18 @@ export const processLoanDecision = async (req, res) => {
         });
 
         return res.json({ message: `Dossier traité avec succès : statut mis à jour à [${action}].`, loan: transactionResult });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+export const getAllLoans = async (req, res) => {
+    try {
+        const loans = await sqlitePrisma.loan.findMany({
+            include: { equipment: true },
+            orderBy: { requestDate: 'desc' }
+        });
+        return res.json(loans);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

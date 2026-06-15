@@ -1,5 +1,5 @@
 //import React from 'react';
-import axios from 'react';
+import axios from 'axios';
 import { LoanStatus } from '../config/constants';
 
 export default function AdminLoanRow({ loan, onStatusChange }) {
@@ -9,6 +9,7 @@ export default function AdminLoanRow({ loan, onStatusChange }) {
             onStatusChange(); // Rafraîchit la liste globale sur le dashboard parent
         } catch (err) {
             alert("Erreur lors de la modification du statut.");
+            console.error(err);
         }
     };
 
