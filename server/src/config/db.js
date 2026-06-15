@@ -17,8 +17,26 @@ const MongoDBClient = mongodbModule.PrismaClient ?? mongodbModule.default?.Prism
 
 // Initialisation unique (Singleton Pattern)
 // Prisma v7 requires an explicit options object at construction time.
-const sqlitePrisma = new SQLiteClient({});
-const mongodbPrisma = new MongoDBClient({});
+// Use __internal.configOverride to remove the wasm compiler from the
+// runtime config so the generated client prefers the binary engine.
+function removeWasmCompiler(config) {
+	if (config && config.compilerWasm) {
+		// create a shallow copy to avoid mutating original objects
+		const cfg = { ...config };
+		delete cfg.compilerWasm;
+		return cfg;
+	}
+	return config;
+}
+
+const internalOpts = {
+	// Ensure runtime config has no wasm compiler and hint engine type
+	configOverride: (cfg) => removeWasmCompiler(cfg),
+	engine: { type: 'binary' },
+};
+
+const sqlitePrisma = new SQLiteClient({ __internal: internalOpts });
+const mongodbPrisma = new MongoDBClient({ __internal: internalOpts });
 
 console.log("Connecteurs Prisma initialisés pour SQLite et MongoDB.");
 
