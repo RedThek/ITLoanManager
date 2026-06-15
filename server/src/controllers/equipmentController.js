@@ -1,4 +1,4 @@
-import Equipment from '../models/Equipment.js';
+import Equipment from '../models/index.js';
 
 // POST /api/equipments -> Ajout de matériel (Réservé Admin)
 export const createEquipment = async (req, res) => {
