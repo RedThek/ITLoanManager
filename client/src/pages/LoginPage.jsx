@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +35,7 @@ export default function LoginPage() {
                         onChange={e => setUsername(e.target.value)} 
                         style={{ width: '100%', padding: '8px' }} 
                         name="username"
+                        autoComplete="username"
                         required
                     />
                 </div>
@@ -48,6 +49,7 @@ export default function LoginPage() {
                         onChange={e => setPassword(e.target.value)} 
                         style={{ width: '100%', padding: '8px' }} 
                         name="password"
+                        autoComplete="current-password"
                         required
                     />
                 </div>

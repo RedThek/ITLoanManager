@@ -11,5 +11,7 @@ const mongodbPrisma = new MongoDBClient({
     datasources: { db: { url: process.env.MONGODB_URL } }
 });
 
+console.log("Connecteurs Prisma initialisés pour SQLite et MongoDB.");
+
 // Exportation uniforme pour le reste de l'application
 export { sqlitePrisma, mongodbPrisma };

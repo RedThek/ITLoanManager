@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/app.js",
     "prisma:generate": "npx prisma generate --config=./prisma.sqlite.config.ts && npx prisma generate --config=./prisma.mongodb.config.ts",
     "prisma:migrate:sqlite": "npx prisma migrate dev --config=./prisma.sqlite.config.ts --name init",
-    "prisma:db:push:mongodb": "npx prisma db push --config=./prisma.mongodb.config.ts"
+    "prisma:db:push:mongodb": "npx prisma db push --config=./prisma.mongodb.config.ts",
+    "seed": "node src/scripts/seed.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
