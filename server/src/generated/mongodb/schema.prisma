@@ -1,0 +1,38 @@
+datasource db {
+  provider = "mongodb"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // On déporte la génération dans un autre sous-dossier spécifique
+  output   = "../src/generated/mongodb"
+}
+
+// Modèle Utilisateur pour l'authentification unifiée
+model User {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  username  String  @unique
+  password  String
+  role      String // 'STUDENT' ou 'ADMIN'
+  matricule String? @unique // Requis si rôle 'STUDENT'
+}
+
+// Modèle Équipement
+model Equipment {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  name          String // ex: "Raspberry Pi 4 Model B"
+  category      String // ex: "Microcontrôleur", "Réseau"
+  status        String @default("En stock") // 'En stock', 'Emprunte', 'Maintenance'
+  referenceCode String @unique // Code barre ou numéro de série
+  loans         Loan[]
+}
+
+// Modèle Emprunt
+model Loan {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String // Le matricule de l'étudiant
+  equipmentId String    @db.ObjectId
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  requestDate DateTime  @default(now())
+  status      String    @default("En attente") // 'En attente', 'Approuve', 'Refuse', 'Termine'
+}

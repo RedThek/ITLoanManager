@@ -26,24 +26,28 @@ export default function LoginPage() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleFormSubmit}>
                 <div style={{ marginBottom: '12px' }}>
-                    <label>Nom d'utilisateur :</label>
+                    <label htmlFor="username">Nom d'utilisateur :</label>
                     <input 
                         type="text" 
+                        id="username"
                         value={username}
                         placeholder="Entrez votre nom d'utilisateur"
                         onChange={e => setUsername(e.target.value)} 
                         style={{ width: '100%', padding: '8px' }} 
+                        name="username"
                         required
                     />
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                    <label>Mot de passe :</label>
+                    <label htmlFor="password">Mot de passe :</label>
                     <input 
                         type="password" 
+                        id="password"
                         value={password}
                         placeholder="Entrez votre mot de passe"
                         onChange={e => setPassword(e.target.value)} 
                         style={{ width: '100%', padding: '8px' }} 
+                        name="password"
                         required
                     />
                 </div>

@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:generate": "npx prisma generate --config=./prisma.sqlite.config.ts && npx prisma generate --config=./prisma.mongodb.config.ts",
+    "prisma:migrate:sqlite": "npx prisma migrate dev --config=./prisma.sqlite.config.ts --name init",
+    "prisma:db:push:mongodb": "npx prisma db push --config=./prisma.mongodb.config.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +19,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "sqlite3": "^6.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",

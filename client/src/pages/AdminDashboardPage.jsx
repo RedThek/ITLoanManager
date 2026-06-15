@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import AddEquipmentForm from '../components/AddEquipmentForm';
 import AdminLoanRow from '../components/AdminLoanRow';
@@ -8,6 +8,7 @@ export default function AdminDashboardPage() {
     const { user, logoutUser } = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' ou 'loans'
     const [loans, setLoans] = useState([]);
+    const [alertCount, setAlertCount] = useState(0);
 
     const fetchLoans = async () => {
         try {
@@ -19,7 +20,17 @@ export default function AdminDashboardPage() {
     };
 
     useEffect(() => {
+        const checkRequests = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/loans/pending-count');
+                setAlertCount(res.data.pendingCount);
+            } catch (err) {
+                console.error("Erreur de synchronisation du compteur");
+                console.error(err);
+            }
+        };
         if (activeTab === 'loans') {
+            checkRequests();
             fetchLoans();
         }
     }, [activeTab]);
@@ -35,6 +46,17 @@ export default function AdminDashboardPage() {
                     Déconnexion
                 </button>
             </header>
+
+            <div>
+                {alertCount > 0 && (
+                    <div style={{ backgroundColor: '#FFF5F5', borderLeft: '4px solid #E53E3E', padding: '15px', margin: '15px 0', borderRadius: '4px' }}>
+                        <p style={{ color: '#C53030', margin: 0, fontWeight: 'bold' }}>
+                            ⚠️ Notification Système : {alertCount} nouvelle(s) demande(s) d'étudiant(s) en attente de traitement instantané !
+                        </p>
+                    </div>
+                )}
+                {/* Reste des onglets du Dashboard */}
+            </div>
 
             {/* Menu de navigation par Onglets exigé par le cahier des charges */}
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>

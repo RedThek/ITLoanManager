@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import EquipmentCard from '../components/EquipmentCard';
@@ -23,7 +23,7 @@ export default function StudentPage() {
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            <header style={{ display: 'flex', justifyContent: 'beteen', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
                 <div>
                     <h2>Espace Étudiant — Gestion de Prêts IT</h2>
                     <p>Bienvenue, <strong>{user?.username}</strong> (Matricule : {user?.matricule || 'N/A'})</p>

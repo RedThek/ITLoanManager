@@ -43,5 +43,5 @@ model Loan {
   equipmentId String    @db.ObjectId
   equipment   Equipment @relation(fields: [equipmentId], references: [id])
   requestDate DateTime  @default(now())
-  status      String    @default("En attente") // 'En attente', 'Approuve', 'Refuse', 'Termine' [cite: 34]
+  status      String    @default("En attente") // 'En attente', 'Approuve', 'Refuse', 'Termine'
 }

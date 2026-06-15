@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { addEquipmentAPI } from '../services/equipmentService';
 
 export default function AddEquipmentForm({ onEquipmentAdded }) {
