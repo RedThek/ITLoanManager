@@ -6,6 +6,6 @@ const router = express.Router();
 
 // Route sécurisée : Seuls les administrateurs authentifiés peuvent ajouter du matériel
 router.post('/equipments', authenticateToken, requireRole('ADMIN'), createEquipment);
-router.get('/api/equipments', authenticateToken, getAllEquipments);
+router.get('/equipments', authenticateToken, getAllEquipments);
 
 export default router;

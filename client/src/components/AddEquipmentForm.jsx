@@ -26,7 +26,7 @@ export default function AddEquipmentForm({ onEquipmentAdded }) {
 
     return (
         <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px', maxWidth: '400px' }}>
-            <h3>Ajouter un Nouvel Équipement (Admin)</h3> [cite: 62]
+            <h3>Ajouter un Nouvel Équipement (Admin)</h3>
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '10px' }}>
                     <label>Nom de l'équipement :</label>

@@ -68,10 +68,10 @@ export default function AdminInventoryManager() {
                     <h4>Modifier l'équipement</h4>
                     <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required placeholder="Nom de l'appareil" />
                     <input type="text" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} required placeholder="Catégorie" />
-                    <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}> [cite: 28]
-                        <option value="En stock">En stock</option> [cite: 28]
-                        <option value="Emprunte">Emprunté</option> [cite: 28]
-                        <option value="Maintenance">En maintenance</option> [cite: 28]
+                    <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+                        <option value="En stock">En stock</option>
+                        <option value="Emprunte">Emprunté</option>
+                        <option value="Maintenance">En maintenance</option>
                     </select>
                     <button type="submit" style={{ marginLeft: '10px', backgroundColor: '#48BB78', color: 'white' }}>Enregistrer les modifications</button>
                     <button type="button" onClick={() => setEditingItem(null)} style={{ marginLeft: '5px' }}>Annuler</button>
@@ -81,17 +81,17 @@ export default function AdminInventoryManager() {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                 <thead>
                     <tr style={{ backgroundColor: '#EDF2F7', textAlign: 'left' }}>
-                        <th style={{ padding: '10px' }}>Code Réf</th> [cite: 29]
-                        <th>Désignation</th> [cite: 26]
-                        <th>Catégorie</th> [cite: 27]
-                        <th>Statut</th> [cite: 28]
+                        <th style={{ padding: '10px' }}>Code Réf</th>
+                        <th>Désignation</th>
+                        <th>Catégorie</th>
+                        <th>Statut</th>
                         <th>Actions administratives</th>
                     </tr>
                 </thead>
                 <tbody>
                     {equipments.map(equip => (
                         <tr key={equip.id} style={{ borderBottom: '1px solid #E2E8F0' }}>
-                            <td style={{ padding: '10px' }}>{equip.referenceCode}</td> [cite: 29]
+                            <td style={{ padding: '10px' }}>{equip.referenceCode}</td>
                             <td>{equip.name}</td>
                             <td>{equip.category}</td>
                             <td><strong>{equip.status}</strong></td>

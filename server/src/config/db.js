@@ -1,44 +1,18 @@
-// Charger les variables d'environnement avant d'initialiser Prisma
+// Charger les variables d'environnement
+import mongoose from 'mongoose';
 import 'dotenv/config';
 
-// Force Prisma client to use the binary engine in this Node.js environment.
-// Some generated clients may default to the "client" (WASM) engine, which
-// requires an adapter. Setting this env var before importing the generated
-// Prisma client ensures the runtime picks the binary engine instead.
-process.env.PRISMA_CLIENT_ENGINE_TYPE = process.env.PRISMA_CLIENT_ENGINE_TYPE || 'binary';
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URL || 5000;
 
-// Import des clients générés uniquement après l'initialisation des variables
-// d'environnement pour garantir que Prisma choisit bien l'engine binaire.
-const sqliteModule = await import('../generated/sqlite/index.js');
-const mongodbModule = await import('../generated/mongodb/index.js');
-
-const SQLiteClient = sqliteModule.PrismaClient ?? sqliteModule.default?.PrismaClient ?? sqliteModule.default;
-const MongoDBClient = mongodbModule.PrismaClient ?? mongodbModule.default?.PrismaClient ?? mongodbModule.default;
-
-// Initialisation unique (Singleton Pattern)
-// Prisma v7 requires an explicit options object at construction time.
-// Use __internal.configOverride to remove the wasm compiler from the
-// runtime config so the generated client prefers the binary engine.
-function removeWasmCompiler(config) {
-	if (config && config.compilerWasm) {
-		// create a shallow copy to avoid mutating original objects
-		const cfg = { ...config };
-		delete cfg.compilerWasm;
-		return cfg;
-	}
-	return config;
-}
-
-const internalOpts = {
-	// Ensure runtime config has no wasm compiler and hint engine type
-	configOverride: (cfg) => removeWasmCompiler(cfg),
-	engine: { type: 'binary' },
+    const conn = await mongoose.connect(mongoURI);
+    console.log('Successfully connected to MongoDB 7 via Mongoose.');
+  } catch (error) {
+    console.error('Database connection failed:', error.message);
+    process.exit(1); // Stop the server on connection failure
+  }
 };
 
-const sqlitePrisma = new SQLiteClient({ __internal: internalOpts });
-const mongodbPrisma = new MongoDBClient({ __internal: internalOpts });
-
-console.log("Connecteurs Prisma initialisés pour SQLite et MongoDB.");
-
 // Exportation uniforme pour le reste de l'application
-export { sqlitePrisma, mongodbPrisma };
+//export default { mongoose };

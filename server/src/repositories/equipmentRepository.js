@@ -1,9 +1,9 @@
-import { sqlitePrisma as prisma } from '../config/db.js';
+import mongoose from '../config/db.js';
 
 export const EquipmentRepository = {
-    // Insertion en base de données via Prisma
+    // Insertion en base de données via mongoose
     async create(equipmentData) {
-        return await prisma.equipment.create({
+        return await mongoose.equipment.create({
             data: {
                 name: equipmentData.name,
                 category: equipmentData.category,
@@ -14,8 +14,8 @@ export const EquipmentRepository = {
     },
 
     async findByReference(referenceCode) {
-        return await prisma.equipment.findUnique({
-            where: { referenceCode }
+        return await mongoose.equipment.findOne({
+            referenceCode
         });
     }
 };

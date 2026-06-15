@@ -1,25 +1,19 @@
-import { EquipmentService } from '../services/equipmentService.js';
+import Equipment from '../models/Equipment.js';
 
+// POST /api/equipments -> Ajout de matériel (Réservé Admin)
 export const createEquipment = async (req, res) => {
     try {
-        // Extraction des données du corps de la requête HTTP
-        const { name, category, referenceCode } = req.body;
-
-        // Validation basique des champs requis [cite: 26, 27, 29]
-        if (!name || !category || !referenceCode) {
-            return res.status(400).json({ error: "Tous les champs (name, category, referenceCode) sont requis." });
-        }
-
-        const newEquipment = await EquipmentService.registerEquipment({ name, category, referenceCode });
-        return res.status(201).json(newEquipment);
+        const newItem = await Equipment.create(req.body);
+        return res.status(201).json(newItem);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ error: "Données invalides : " + error.message });
     }
 };
 
+// GET /api/equipments -> Liste complète du matériel
 export const getAllEquipments = async (req, res) => {
     try {
-        const equipments = await EquipmentService.getAllEquipments();
+        const equipments = await Equipment.find();
         return res.json(equipments);
     } catch (error) {
         return res.status(500).json({ error: error.message });

@@ -1,31 +1,17 @@
-import { sqlitePrisma, mongodbPrisma } from '../config/db.js';
-
-// =========================================================================
-// GESTION DES ÉQUIPEMENTS (MATÉRIEL)
-// =========================================================================
+import { User, Equipment, Loan } from '../models/index.js';
+import { EquipmentStatus, LoanStatus, UserRoles } from '../config/constants.js';
 
 export const updateEquipment = async (req, res) => {
     const { id } = req.params;
     const { name, category, status, referenceCode } = req.body;
 
     try {
-        const parsedId = parseInt(id);
-
-        // 1. Mise à jour dans SQLite
-        const updatedSqlite = await sqlitePrisma.equipment.update({
-            where: { id: parsedId },
-            data: { name, category, status, referenceCode }
-        });
-
-        // 2. Mise à jour miroir dans MongoDB (Correspondance basée sur le code de référence unique)
-        await mongodbPrisma.equipment.updateMany({
-            where: { referenceCode: updatedSqlite.referenceCode },
-            data: { name, category, status }
-        });
-
-        return res.json({ message: "Équipement mis à jour avec succès dans les deux bases.", equipment: updatedSqlite });
+        // On utilise findByIdAndUpdate avec l'option { new: true } pour retourner l'objet modifié
+        const updated = await Equipment.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+        if (!updated) return res.status(404).json({ error: "Équipement non trouvé" });
+        return res.json(updated);
     } catch (error) {
-        return res.status(500).json({ error: "Échec de la mise à jour : " + error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -33,54 +19,42 @@ export const deleteEquipment = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const parsedId = parseInt(id);
-
-        // Récupération de l'équipement pour obtenir son code de référence unique avant suppression
-        const equipment = await sqlitePrisma.equipment.findUnique({ where: { id: parsedId } });
-        if (!equipment) return res.status(404).json({ error: "Équipement introuvable." });
-
-        // Vérification d'intégrité : Interdire la suppression si le matériel fait l'objet d'un prêt actif
-        const activeLoans = await sqlitePrisma.loan.findMany({
-            where: { equipmentId: parsedId, status: "Approuve" }
-        });
-        if (activeLoans.length > 0) {
-            return res.status(400).json({ error: "Impossible de supprimer un équipement en cours d'emprunt." });
-        }
-
-        // Suppression synchronisée
-        await sqlitePrisma.equipment.delete({ where: { id: parsedId } });
-        await mongodbPrisma.equipment.deleteMany({ where: { referenceCode: equipment.referenceCode } });
-
-        return res.json({ message: "Équipement radié de l'inventaire avec succès." });
+        const deleted = await Equipment.findByIdAndDelete(id);
+        if (!deleted) return res.status(404).json({ error: "Équipement non trouvé" });
+        return res.json({ message: "Équipement supprimé avec succès de MongoDB." });
     } catch (error) {
-        return res.status(500).json({ error: "Erreur lors de la suppression : " + error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
-
-// =========================================================================
-// GESTION DES UTILISATEURS
-// =========================================================================
 
 export const updateUser = async (req, res) => {
     const { id } = req.params;
     const { username, role, matricule } = req.body;
 
     try {
-        const parsedId = parseInt(id);
+        if (!username && !role && !matricule) {
+            return res.status(400).json({ error: 'Aucune donnée de mise à jour fournie.' });
+        }
 
-        const updatedUser = await sqlitePrisma.user.update({
-            where: { id: parsedId },
-            data: { username, role, matricule },
-            select: { id: true, username: true, role: true, matricule: true }
-        });
+        if (role && !Object.values(UserRoles).includes(role)) {
+            return res.status(400).json({ error: 'Rôle spécifié invalide.' });
+        }
 
-        // Synchronisation MongoDB basée sur le nom d'utilisateur unique
-        await mongodbPrisma.user.updateMany({
-            where: { username: updatedUser.username },
-            data: { role, matricule }
-        });
+        if (role === UserRoles.STUDENT && !matricule) {
+            return res.status(400).json({ error: 'Le matricule est obligatoire pour les étudiants.' });
+        }
 
-        return res.json({ message: "Profil utilisateur synchronisé et mis à jour.", user: updatedUser });
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { username, role, matricule },
+            { new: true, runValidators: true }
+        ).select('id username role matricule');
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'Utilisateur introuvable.' });
+        }
+
+        return res.json({ message: 'Profil utilisateur mis à jour.', user: updatedUser });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -90,13 +64,11 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const parsedId = parseInt(id);
-        const user = await sqlitePrisma.user.findUnique({ where: { id: parsedId } });
-        if (!user) return res.status(404).json({ error: "Utilisateur introuvable." });
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ error: 'Utilisateur introuvable.' });
 
-        // Suppression en cascade ou sécurisée
-        await sqlitePrisma.user.delete({ where: { id: parsedId } });
-        await mongodbPrisma.user.deleteMany({ where: { username: user.username } });
+        await Loan.deleteMany({ studentId: user._id });
+        await User.deleteOne({ _id: user._id });
 
         return res.json({ message: `L'utilisateur [${user.username}] a été supprimé du système.` });
     } catch (error) {
