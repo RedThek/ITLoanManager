@@ -5,7 +5,7 @@ import { authenticateToken, requireRole } from '../middlewares/authMiddleware.js
 const router = express.Router();
 
 // Route sécurisée : Seuls les administrateurs authentifiés peuvent ajouter du matériel
-router.post('/equipments', authenticateToken, requireRole('ADMIN'), createEquipment);
-router.get('/equipments', authenticateToken, getAllEquipments);
+router.post('/', authenticateToken, requireRole('ADMIN'), createEquipment);
+router.get('/', authenticateToken, getAllEquipments);
 
 export default router;

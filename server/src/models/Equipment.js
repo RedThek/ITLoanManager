@@ -29,6 +29,11 @@ const equipmentSchema = new Schema({
         type: Date, 
         default: Date.now 
     }
+},
+    { 
+        toJSON: { 
+            virtuals: true 
+        } 
 });
 
-export const Equipment = mongoose.models.Equipment || model('Equipment', equipmentSchema);``
+export const Equipment = mongoose.models.Equipment || model('Equipment', equipmentSchema);

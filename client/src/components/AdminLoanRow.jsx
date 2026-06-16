@@ -5,8 +5,8 @@ import { LoanStatus } from '../config/constants';
 export default function AdminLoanRow({ loan, onStatusChange }) {
     const handleAction = async (targetStatus) => {
         try {
-            await axios.patch(`http://localhost:5000/api/loans/${loan._id}/status`, { targetStatus });
-            onStatusChange(); // Rafraîchit la liste globale sur le dashboard parent
+            await axios.patch(`http://localhost:5000/api/loans/${loan._id}/status`, { status: targetStatus });
+            onStatusChange();
         } catch (err) {
             alert("Erreur lors de la modification du statut.");
             console.error(err);
@@ -16,7 +16,7 @@ export default function AdminLoanRow({ loan, onStatusChange }) {
     return (
         <tr>
             <td>{loan.studentId}</td>
-            <td>{loan.equipment?.name || "Chargement..."}</td>
+            <td>{loan.equipmentId?.name || "Chargement..."}</td>
             <td>{new Date(loan.requestDate).toLocaleDateString()}</td>
             <td><strong>{loan.status}</strong></td>
             <td>

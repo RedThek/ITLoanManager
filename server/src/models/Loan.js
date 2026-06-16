@@ -25,6 +25,10 @@ const loanSchema = new Schema({
     actionDate: { 
         type: Date 
     }
+}, {
+    toJSON: {
+        virtuals: true
+    }
 });
 
 export const Loan = mongoose.models.Loan || model('Loan', loanSchema);

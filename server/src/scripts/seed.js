@@ -1,53 +1,52 @@
 import bcrypt from 'bcryptjs';
-import './config/db.js';
-import { Equipment, User } from './models/index.js';
+import mongoose from 'mongoose';
 import 'dotenv/config';
+import { connectDB } from '../config/db.js';
+import { Equipment, User } from '../models/index.js';
+
 
 async function main() {
-    console.log('Début de l\'ensemencement (Seeding) MongoDB...');
+    await connectDB();
+    console.log('Connexion établie, début du seeding...');
 
-    const defaultPassword = 'user123';
-    const adminPassword = 'admin123';
-    const adminHashedPassword = await bcrypt.hash(adminPassword, 10);
-    const userHashedPassword = await bcrypt.hash(defaultPassword, 10);
+    const adminPassword = await bcrypt.hash('admin123', 10);
+    const studentPassword = await bcrypt.hash('user123', 10);
 
-    const adminData = {
-        username: 'admin',
-        password: adminHashedPassword,
-        role: 'ADMIN',
-        matricule: null,
-    };
+    await User.deleteMany({});
+    await Equipment.deleteMany({});
 
-    const studentData = {
-        username: 'mola',
-        password: userHashedPassword,
-        role: 'STUDENT',
-        matricule: '25ENSPM0491',
-    };
+    const admin = await User.create(
+        {   username: 'admin', 
+            password: adminPassword, 
+            role: 'ADMIN', 
+            matricule: null 
+        }
+    );
 
-    const equipmentData = {
-        name: 'Routeur Cisco Catalyst 2960',
-        category: 'Réseau',
-        status: 'En stock',
-        referenceCode: 'CISCO-2960',
-    };
+    const student = await User.create(
+        {   username: 'mola', 
+            password: studentPassword, 
+            role: 'STUDENT', 
+            matricule: '25ENSPM0491' 
+        }
+    );
 
-    try {
-        console.log('Nettoyage des collections MongoDB...');
-        await User.deleteMany({});
-        await Equipment.deleteMany({});
+    const equip = await Equipment.create(
+        { 
+            name: 'Routeur Cisco Catalyst 2960', 
+            category: 'Réseau', 
+            status: 'En stock', 
+            referenceCode: 'CISCO-2960' 
+        }
+    );
 
-        const adminUser = await User.create(adminData);
-        const studentUser = await User.create(studentData);
-        const createdEquipment = await Equipment.create(equipmentData);
-
-        console.log(`MongoDB peuplé ! Admin ID: ${adminUser._id}, Étudiant ID: ${studentUser._id}, Equip ID: ${createdEquipment._id}`);
-    } catch (error) {
-        console.error('Erreur critique lors du seeding :', error);
-        process.exit(1);
-    }
-
-    console.log('Processus de seeding terminé avec succès.');
+    console.log(
+        `Admin: ${admin._id}, 
+        Étudiant: ${student._id}, 
+        Équipement: ${equip._id}`
+    );
+    
+    await mongoose.connection.close();
 }
 
-main();
+main().catch((e) => { console.error(e); process.exit(1); });

@@ -5,9 +5,9 @@ import { authenticateToken } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Route sécurisée : seul un utilisateur authentifié peut soumettre un prêt
-router.post('/loans', authenticateToken, createLoanRequest);
-router.get('/loans', authenticateToken, getAllLoans);
-router.get('/loans/pending-count', authenticateToken, getPendingLoansCount);
-router.patch('/loans/:id/status', authenticateToken, updateLoanStatus);
+router.post('/', authenticateToken, createLoanRequest);
+router.get('/', authenticateToken, getAllLoans);
+router.get('/pending-count', authenticateToken, getPendingLoansCount);
+router.patch('/:id/status', authenticateToken, updateLoanStatus);
 
 export default router;
