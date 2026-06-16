@@ -1,5 +1,7 @@
 import { User, Equipment, Loan } from '../models/index.js';
 import { EquipmentStatus, LoanStatus, UserRoles } from '../config/constants.js';
+import { LoanMonitoringService } from '../services/LoanMonitoringService.js';
+import { NotificationService } from '../services/NotificationService.js';
 
 export const updateEquipment = async (req, res) => {
     const { id } = req.params;
@@ -71,6 +73,50 @@ export const deleteUser = async (req, res) => {
         await User.deleteOne({ _id: user._id });
 
         return res.json({ message: `L'utilisateur [${user.username}] a été supprimé du système.` });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Lister tous les utilisateurs (pour la vue admin)
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find()
+            .select('-password')  // Ne jamais renvoyer le mot de passe hashé
+            .sort({ createdAt: -1 });
+        return res.json(users);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Lister les emprunts en retard
+export const getOverdueLoans = async (req, res) => {
+    try {
+        const overdueLoans = await LoanMonitoringService.getOverdueLoans();
+        // Enrichir avec le nombre de jours de retard
+        const enriched = overdueLoans.map(loan => ({
+            ...loan.toJSON(),
+            daysElapsed: LoanMonitoringService.calculateDaysElapsed(loan),
+        }));
+        return res.json(enriched);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Déclencher manuellement une alerte pour un prêt spécifique
+export const triggerManualAlert = async (req, res) => {
+    try {
+        const { loanId } = req.params;
+        const loan = await Loan.findById(loanId).populate('equipmentId');
+        if (!loan) return res.status(404).json({ error: "Prêt introuvable." });
+
+        const notification = await NotificationService.createOverdueWarning(loan);
+        if (!notification) {
+            return res.status(409).json({ message: "Une alerte a déjà été envoyée pour ce prêt." });
+        }
+        return res.json({ message: "Alerte envoyée avec succès.", notification });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

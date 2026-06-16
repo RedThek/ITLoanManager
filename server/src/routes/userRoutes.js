@@ -4,6 +4,6 @@ import { createUserDynamically } from '../controllers/userController.js';
 const router = express.Router();
 
 // Déclaration de la route dynamique d'inscription
-router.post('/users/register-dynamic', createUserDynamically);
+router.post('/register-dynamic', createUserDynamically);
 
 export default router;

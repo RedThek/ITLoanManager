@@ -3,11 +3,14 @@ import cors from 'cors';
 import 'dotenv/config';
 import { connectDB } from './config/db.js';
 
+
 import authRoutes from './routes/authRoutes.js';
 import equipmentRoutes from './routes/equipmentRoutes.js';
 import loanRoutes from './routes/loanRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import { startLoanMonitoringJob } from './jobs/loanMonitoringJob.js';
 
 const app = express();
 app.use(express.json());
@@ -15,6 +18,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 
 connectDB();
 
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/equipments', equipmentRoutes);
 app.use('/api/loans', loanRoutes);
@@ -31,3 +35,5 @@ app.listen(PORT, () => {
     console.log(`Serveur actif et à l'écoute sur : http://localhost:${PORT}`);
     console.log(`Testez de connectivité via GET http://localhost:${PORT}/api/diagnostic`);
 });
+
+startLoanMonitoringJob();

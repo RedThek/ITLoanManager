@@ -66,3 +66,19 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
     return res.json({ message: 'Déconnexion réussie. Veuillez supprimer le token côté client.' });
 };
+
+export const reset = (req, res) => {
+    try {
+        const { matricule } = req.body;
+        const user = await User.findOne({ matricule });
+
+        if (!user || !(matricule === user.matricule)) {
+            return res.status(401).json({ error: 'Matricule invalide.' });
+        }
+
+        return res.json({ user: { username: user.username, role: user.role, matricule: user.matricule } }); 
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};

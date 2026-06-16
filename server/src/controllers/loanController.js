@@ -1,6 +1,9 @@
 import { Loan } from '../models/Loan.js';
 import { Equipment } from '../models/Equipment.js';
 import { LoanStatus, EquipmentStatus } from '../config/constants.js';
+import { LoanPolicy } from '../config/loanPolicy.js';
+import { NotificationService } from '../services/NotificationService.js';
+import { NotificationType } from '../models/Notification.js';
 
 // POST /api/loans -> L'étudiant connecté crée une demande
 export const createLoanRequest = async (req, res) => {
@@ -39,12 +42,27 @@ export const updateLoanStatus = async (req, res) => {
 
         currentLoan.status = status;
         currentLoan.actionDate = new Date();
-        await currentLoan.save();
 
+        // Calcul de la date d'échéance lors de l'approbation
         if (status === LoanStatus.APPROVED) {
+            currentLoan.dueDate = new Date(Date.now() + LoanPolicy.MAX_LOAN_DURATION_MS);
+            await currentLoan.save();
             await Equipment.findByIdAndUpdate(currentLoan.equipmentId, { status: EquipmentStatus.BORROWED });
+            // Notification à l'étudiant
+            const equip = await Equipment.findById(currentLoan.equipmentId);
+            await NotificationService.notifyStatusChange(currentLoan, NotificationType.LOAN_APPROVED, equip?.name || 'matériel');
+
         } else if (status === LoanStatus.FINISHED) {
+            await currentLoan.save();
             await Equipment.findByIdAndUpdate(currentLoan.equipmentId, { status: EquipmentStatus.IN_STOCK });
+
+        } else if (status === LoanStatus.REJECTED) {
+            await currentLoan.save();
+            const equip = await Equipment.findById(currentLoan.equipmentId);
+            await NotificationService.notifyStatusChange(currentLoan, NotificationType.LOAN_REJECTED, equip?.name || 'matériel');
+
+        } else {
+            await currentLoan.save();
         }
 
         return res.json({ message: "Statut mis à jour avec succès.", loan: currentLoan });

@@ -24,6 +24,10 @@ const loanSchema = new Schema({
     },
     actionDate: { 
         type: Date 
+    },
+    dueDate:    {
+        type: Date,
+        default: null, // Calculé automatiquement lors du passage au statut 'Approuve'
     }
 }, {
     toJSON: {
