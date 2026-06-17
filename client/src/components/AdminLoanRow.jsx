@@ -1,11 +1,11 @@
 //import React from 'react';
-import axios from 'axios';
+import api from '../services/api'
 import { LoanStatus } from '../config/constants';
 
 export default function AdminLoanRow({ loan, onStatusChange }) {
     const handleAction = async (targetStatus) => {
         try {
-            await axios.patch(`http://localhost:5000/api/loans/${loan._id}/status`, { status: targetStatus });
+            await api.patch(`/loans/${loan._id}/status`, { status: targetStatus });
             onStatusChange();
         } catch (err) {
             alert("Erreur lors de la modification du statut.");

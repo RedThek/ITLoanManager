@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api'
 
 export default function OverdueLoansTable() {
     const [overdueLoans, setOverdueLoans] = useState([]);
     const [alertingSent, setAlertingSent] = useState({});
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/admin/loans/overdue')
+        api.get('/admin/loans/overdue')
             .then(r => setOverdueLoans(r.data))
             .catch(err => console.error(err));
     }, []);
 
     const sendAlert = async (loanId) => {
         try {
-            await axios.post(`http://localhost:5000/api/admin/loans/${loanId}/alert`);
+            await api.post(`/admin/loans/${loanId}/alert`);
             setAlertingSent(prev => ({ ...prev, [loanId]: true }));
             alert("Alerte envoyée à l'étudiant.");
         } catch (err) {

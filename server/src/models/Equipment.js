@@ -36,4 +36,7 @@ const equipmentSchema = new Schema({
         } 
 });
 
+equipmentSchema.index({ status: 1 });
+equipmentSchema.index({ category: 1 });
+
 export const Equipment = mongoose.models.Equipment || model('Equipment', equipmentSchema);

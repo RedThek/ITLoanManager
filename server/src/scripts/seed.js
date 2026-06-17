@@ -9,8 +9,8 @@ async function main() {
     await connectDB();
     console.log('Connexion établie, début du seeding...');
 
-    const adminPassword = await bcrypt.hash('admin123', 10);
-    const studentPassword = await bcrypt.hash('user123', 10);
+    const adminPassword = await bcrypt.hash('admin123', 12);
+    const studentPassword = await bcrypt.hash('user123', 12);
 
     await User.deleteMany({});
     await Equipment.deleteMany({});

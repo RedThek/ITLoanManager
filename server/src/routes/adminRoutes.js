@@ -1,5 +1,13 @@
 import express from 'express';
-import { getAllUsers, getOverdueLoans, triggerManualAlert, updateEquipment, deleteEquipment, updateUser, deleteUser, getAllUsers } from '../controllers/adminController.js';
+import { 
+    getAllUsers, 
+    getOverdueLoans, 
+    triggerManualAlert, 
+    updateEquipment, 
+    deleteEquipment, 
+    updateUser, 
+    deleteUser, 
+} from '../controllers/adminController.js';
 import { register } from '../controllers/authController.js';
 import { authenticateToken } from '../middlewares/authMiddleware.js';
 import { requireAdmin } from '../middlewares/roleMiddleware.js';
@@ -21,5 +29,10 @@ router.delete('/equipments/:id', deleteEquipment);
 // Routes Utilisateurs
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
+
+router.get('/users/:id',           getUserById);
+router.patch('/users/:id/password', updateUserPassword);
+router.get('/loans/:id',           getLoanById);
+router.delete('/loans/:id',        deleteLoan);
 
 export default router;

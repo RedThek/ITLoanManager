@@ -1,9 +1,9 @@
-import axios from 'axios';
+import api from './api';
 
-const BASE = 'http://localhost:5000/api/notifications';
+const BASE = '/notifications'; // relatif à baseURL de api.js
 
 export const notificationService = {
-    getAll: () => axios.get(BASE).then(r => r.data),
-    getUnreadCount: () => axios.get(`${BASE}/unread-count`).then(r => r.data.count),
-    markAsRead: (id) => axios.patch(`${BASE}/${id}/read`).then(r => r.data),
+    getAll:          ()   => api.get(BASE).then(r => r.data),
+    getUnreadCount:  ()   => api.get(`${BASE}/unread-count`).then(r => r.data.count),
+    markAsRead:      (id) => api.patch(`${BASE}/${id}/read`).then(r => r.data),
 };

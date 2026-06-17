@@ -24,7 +24,12 @@ IT Loan Manager est une application web full-stack moderne conçue pour numéris
   - [🚀 Installation et Lancement (Local)](#-installation-et-lancement-local)
     - [1. Cloner le dépôt](#1-cloner-le-dépôt)
   - [🔐 Configuration de l'Environnement](#-configuration-de-lenvironnement)
-  - [Routes API](#routes-api)
+  - [🛣️ Routes API](#️-routes-api)
+    - [Auth (`/api/auth`)](#auth-apiauth)
+    - [Équipements (`/api/equipments`)](#équipements-apiequipments)
+    - [Prêts (`/api/loans`)](#prêts-apiloans)
+    - [Administration (`/api/admin`)](#administration-apiadmin)
+    - [Notifications (`/api/notifications`)](#notifications-apinotifications)
   - [Example de Requestes avec Postman ou ThunderClient](#example-de-requestes-avec-postman-ou-thunderclient)
   - [📂 Structure du Projet](#-structure-du-projet)
   - [🛡 Sécurité et Modélisation](#-sécurité-et-modélisation)
@@ -142,30 +147,55 @@ JWT_SECRET="VOTRE_CLE_SECRETE_TRES_LONGUE_ICI"
 VITE_API_URL="http://localhost:5000/api"
 ```
 
-## Routes API
+## 🛣️ Routes API
 
-Les routes API suivantes sont disponibles:
+### Auth (`/api/auth`)
 
-- **GET /api/equipements**: cherche tous les équipements.
-- **GET /api/student/:id**: cherche un etudiant par ID.
-- **POST /api/admin**: connexion administrateur.
-- **PUT /api/student**: etudiant.
-- **DELETE /api/equipements/:id**: Supprimme un equipement via ID.
+| Méthode | Route                     | Auth        | Description                       |
+|---------|---------------------------|-------------|-----------------------------------|
+| POST    | `/api/auth/register`      | ❌          | Créer un compte                   |
+| POST    | `/api/auth/login`         | ❌          | Connexion (retourne JWT)          |
+| POST    | `/api/auth/logout`        | ✅ JWT      | Déconnexion                       |
+| POST    | `/api/auth/reset`         | ❌          | Réinitialisation mot de passe     |
+
+### Équipements (`/api/equipments`)
+
+| Méthode | Route                     | Auth        | Description                       |
+|---------|---------------------------|-------------|-----------------------------------|
+| GET     | `/api/equipments`         | ✅ JWT      | Lister tout le matériel           |
+| POST    | `/api/equipments`         | ✅ ADMIN    | Créer un équipement               |
+
+### Prêts (`/api/loans`)
+
+| Méthode | Route                     | Auth        | Description                         |
+|---------|---------------------------|-------------|-------------------------------------|
+| GET     | `/api/loans`              | ✅ JWT      | Mes prêts (étudiant) / Tous (admin) |
+| POST    | `/api/loans`              | ✅ STUDENT  | Soumettre une demande               |
+| PATCH   | `/api/loans/:id/status`   | ✅ JWT      | Approuver / Refuser / Terminer      |
+| GET     | `/api/loans/pending-count`| ✅ ADMIN    | Nombre de demandes en attente       |
+
+### Administration (`/api/admin`)
+
+| Méthode | Route                            | Auth        | Description                         |
+|---------|----------------------------------|-------------|-------------------------------------|
+| GET     | `/api/admin/users`               | ✅ ADMIN    | Lister les utilisateurs             |
+| POST    | `/api/admin/users`               | ✅ ADMIN    | Créer étudiant ou admin             |
+| PUT     | `/api/admin/users/:id`           | ✅ ADMIN    | Modifier un utilisateur             |
+| DELETE  | `/api/admin/users/:id`           | ✅ ADMIN    | Supprimer un utilisateur            |
+| PUT     | `/api/admin/equipments/:id`      | ✅ ADMIN    | Modifier un équipement              |
+| DELETE  | `/api/admin/equipments/:id`      | ✅ ADMIN    | Supprimer un équipement             |
+| GET     | `/api/admin/loans/overdue`       | ✅ ADMIN    | Prêts en retard                     |
+| POST    | `/api/admin/loans/:loanId/alert` | ✅ ADMIN    | Envoyer alerte manuelle             |
+
+### Notifications (`/api/notifications`)
+
+| Méthode | Route                               | Auth        | Description                         |
+|---------|-------------------------------------|-------------|-------------------------------------|
+| GET     | `/api/notifications`                | ✅ JWT      | Toutes mes notifications            |
+| GET     | `/api/notifications/unread-count`   | ✅ JWT      | Compteur non lus                    |
+| PATCH   | `/api/notifications/:id/read`       | ✅ JWT      | Marquer comme lu                    |
 
 ## Example de Requestes avec Postman ou ThunderClient
-
-1. **Rechercher tous les équipements**:
-   - Méthode: GET
-   - URL: http://localhost:5000/api/equipements
-
-2. **Rechercher un étudiant par ID**:
-   - Méthode: GET
-   - URL: (http://localhost:5000/api/student/:id) (Remplacer `:id` avec une ID réelle)
-
-3. **Créer un nouvel équipement**:
-   - Méthode: POST
-   - URL: http://localhost:5000/api/equipement
-   - Corps: données JSON avec `equipmentID`, `designation`, `catégorie`, and `référenceCode`.
 
 ## 📂 Structure du Projet
 

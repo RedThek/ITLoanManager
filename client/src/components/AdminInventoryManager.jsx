@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api'
 
 export default function AdminInventoryManager() {
     const [equipments, setEquipments] = useState([]);
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({ name: '', category: '', status: 'En stock', referenceCode: '' });
 
-    const API_URL = 'http://localhost:5000/api';
+    //const API_URL = 'http://localhost:5000/api';
 
     // Récupération initiale de l'inventaire complet
     const fetchInventory = async () => {
         try {
-            const res = await axios.get(`${API_URL}/equipments`);
+            const res = await api.get('/equipments/');
             setEquipments(res.data);
         } catch (err) {
             alert("Erreur lors de la récupération du catalogue.");
@@ -26,7 +26,7 @@ export default function AdminInventoryManager() {
             try {
                 // Utilisation du token d'authentification stocké localement (ex: localStorage)
                 const token = localStorage.getItem('token');
-                await axios.delete(`${API_URL}/admin/equipments/${id}`, {
+                await api.delete(`/admin/equipments/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 alert("Équipement supprimé.");
@@ -47,7 +47,7 @@ export default function AdminInventoryManager() {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/admin/equipments/${editingItem}`, formData, {
+            await api.put(`/admin/equipments/${editingItem}`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Mise à jour effectuée !");

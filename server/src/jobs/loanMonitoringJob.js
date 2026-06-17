@@ -1,4 +1,4 @@
-import { LoanMonitoringService } from '../services/LoanMonitoringService.js';
+import { LoanMonitoringService } from '../services/loanMonitoringService.js';
 import { LoanPolicy } from '../config/loanPolicy.js';
 
 // Lance la vérification périodique des emprunts en retard.

@@ -1,31 +1,47 @@
-import { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState, useEffect, useCallback } from 'react';
+import AdminHeader from '../components/AdminHeader';
+import AdminAlertBanner from './AdminAlertBanner';
+import AdminTabNav from '../components/AdminTabNav';
+import LoansTable from '../components/LoansTable';
 import AddEquipmentForm from '../components/AddEquipmentForm';
 import AdminLoanRow from '../components/AdminLoanRow';
 import AdminInventoryManager from '../components/AdminInventoryManager';
 import AddStudentForm from '../components/AddStudentForm';
 import OverdueLoansTable from '../components/OverdueLoansTable';
-import axios from 'axios';
+import api from '../services/api.js';
 
 export default function AdminDashboardPage() {
-    const { user, logoutUser } = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState('catalog'); // 'catalog' ou 'loans'
     const [loans, setLoans] = useState([]);
     const [alertCount, setAlertCount] = useState(0);
+    const [inventory, setInventory] = useState();
 
-    const fetchLoans = async () => {
+    const fetchInventory = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/loans');
-            setLoans(response.data);
+            const response = await api.get('/equipements');
+            setInventory(response.data);
         } catch (error) {
-            console.error("Erreur lors du chargement des demandes :", error);
+            console.error("Erreur lors du chargement des equipements " + error);
         }
+    }
+
+    const fetchLoans = useCallback(async () => {
+        const response = await api.get('/loans');
+        setLoans(response.data);
+    }, []); // stable, ne change jamais
+
+    const TAB_CONTENT = {
+        catalog:   <AddEquipmentForm onEquipmentAdded={fetchInventory} />,
+        loans:     <LoansTable loans={loans} onStatusChange={fetchLoans} />,
+        students:  <AddStudentForm />,
+        inventory: <AdminInventoryManager />,
+        overdue:   <OverdueLoansTable />,
     };
 
     useEffect(() => {
         const checkRequests = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/loans/pending-count');
+                const res = await api.get('/loans/pending-count');
                 setAlertCount(res.data.pendingCount);
             } catch (err) {
                 console.error("Erreur de synchronisation du compteur");
@@ -40,55 +56,13 @@ export default function AdminDashboardPage() {
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #ccc', paddingBottom: '10px' }}>
-                <div>
-                    <h2>Panneau d'Administration — Labo IT</h2>
-                    <p>Session active : <strong>{user?.username}</strong> (Responsable)</p>
-                </div>
-                <button onClick={logoutUser} style={{ padding: '10px 15px', backgroundColor: '#DC3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                    Déconnexion
-                </button>
-            </header>
 
-            <div>
-                {alertCount > 0 && (
-                    <div style={{ backgroundColor: '#FFF5F5', borderLeft: '4px solid #E53E3E', padding: '15px', margin: '15px 0', borderRadius: '4px' }}>
-                        <p style={{ color: '#C53030', margin: 0, fontWeight: 'bold' }}>
-                            Notification Système : {alertCount} nouvelle(s) demande(s) d'étudiant(s) en attente de traitement instantané !
-                        </p>
-                    </div>
-                )}
-                {/* Reste des onglets du Dashboard */}
-            </div>
+            <AdminHeader/>
+
+            <AdminAlertBanner/>
 
             {/* Menu de navigation par Onglets */}
-            <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <button 
-                    onClick={() => setActiveTab('catalog')} 
-                    style={{ padding: '10px 20px', marginRight: '10px', backgroundColor: activeTab === 'catalog' ? '#007BFF' : '#E2E8F0', color: activeTab === 'catalog' ? 'white' : 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    Onglet 1: Gestion du Catalogue
-                </button>
-                <button 
-                    onClick={() => setActiveTab('loans')} 
-                    style={{ padding: '10px 20px', backgroundColor: activeTab === 'loans' ? '#007BFF' : '#E2E8F0', color: activeTab === 'loans' ? 'white' : 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    Onglet 2: Tableau des Demandes
-                </button>
-                <button 
-                    onClick={() => setActiveTab('students')} 
-                    style={{ padding: '10px 20px', backgroundColor: activeTab === 'students' ? '#007BFF' : '#E2E8F0', color: activeTab === 'students' ? 'white' : 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    Onglet 3 : Créer Étudiants
-                </button>
-                <button 
-                    onClick={() => setActiveTab('inventory')} 
-                    style={{ padding: '10px 20px', backgroundColor: activeTab === 'inventory' ? '#007BFF' : '#E2E8F0', color: activeTab === 'inventory' ? 'white' : 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    Onglet 4 : Inventaire Complet
-                </button>
-                <button 
-                    onClick={() => setActiveTab('overdue')} 
-                    style={{ padding: '10px 20px', backgroundColor: activeTab === 'overdue' ? '#007BFF' : '#E2E8F0', color: activeTab === 'overdue' ? 'white' : 'black', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    ⚠️ Onglet 5 : Retards
-                </button>
-            </div>
+            <AdminTabNav/>
 
             <main style={{ background: '#F8F9FA', padding: '20px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                 {activeTab === 'catalog' ? (
@@ -124,6 +98,7 @@ export default function AdminDashboardPage() {
                 {activeTab === 'inventory' && <AdminInventoryManager />}
                 {activeTab === 'overdue' && <OverdueLoansTable />}
             </main>
+            <main>{TAB_CONTENT[activeTab] ?? null}</main>
         </div>
     );
 }

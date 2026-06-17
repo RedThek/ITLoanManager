@@ -1,9 +1,9 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import api from '../services/api'
 import { AuthContext } from '../context/AuthContext';
 import { EquipmentStatus } from '../config/constants';
 
-export default function EquipmentCard({ equipment, onActionSuccess }) {
+export default React.memo(function EquipmentCard({ equipment, onActionSuccess }) {
     const { user } = useContext(AuthContext);
     const [matriculeInput, setMatriculeInput] = useState('');
     const [showForm, setShowForm] = useState(false);
@@ -13,7 +13,7 @@ export default function EquipmentCard({ equipment, onActionSuccess }) {
     const handleLoanRequest = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/loans', {
+            await api.post('/loans', {
                 equipmentId: equipment.id,
                 studentMatricule: user.matricule || matriculeInput // Capture le matricule saisi ou de session
             });
@@ -58,4 +58,4 @@ export default function EquipmentCard({ equipment, onActionSuccess }) {
             )}
         </div>
     );
-}
+})

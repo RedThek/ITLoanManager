@@ -1,16 +1,15 @@
 import { User, Equipment, Loan } from '../models/index.js';
 import { EquipmentStatus, LoanStatus, UserRoles } from '../config/constants.js';
-import { LoanMonitoringService } from '../services/LoanMonitoringService.js';
-import { NotificationService } from '../services/NotificationService.js';
+import { LoanMonitoringService } from '../services/loanMonitoringService.js';
+import { NotificationService } from '../services/notificationService.js';
 
 export const updateEquipment = async (req, res) => {
     const { id } = req.params;
-    const { name, category, status, referenceCode } = req.body;
-
     try {
-        // On utilise findByIdAndUpdate avec l'option { new: true } pour retourner l'objet modifié
-        const updated = await Equipment.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
-        if (!updated) return res.status(404).json({ error: "Équipement non trouvé" });
+        const updated = await Equipment.findByIdAndUpdate(id, req.body, {
+            new: true, runValidators: true
+        });
+        if (!updated) return res.status(404).json({ error: 'Équipement non trouvé.' });
         return res.json(updated);
     } catch (error) {
         return res.status(400).json({ error: error.message });

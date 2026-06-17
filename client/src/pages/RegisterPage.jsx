@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { UserRoles } from '../config/constants';
+import api from '../services/api.js';
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -8,7 +8,7 @@ export default function RegisterPage() {
         password: '',
         role: UserRoles.STUDENT,
         matricule: '',
-        targetDb: 'sqlite' // Valeur par défaut
+        targetDb: 'mongodb' // Valeur par défaut
     });
     const [uiMessage, setUiMessage] = useState({ text: '', isError: false });
 
@@ -22,7 +22,7 @@ export default function RegisterPage() {
 
         try {
             // Envoi des données vers la route dynamique du serveur backend
-            const response = await axios.post('http://localhost:5000/api/users/register-dynamic', formData);
+            const response = await api.post('/users/register-dynamic', formData);
             setUiMessage({ text: response.data.message, isError: false });
             // Réinitialisation partielle
             setFormData({ ...formData, username: '', password: '', matricule: '' });

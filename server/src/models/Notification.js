@@ -35,5 +35,8 @@ const notificationSchema = new Schema({
     toJSON: { virtuals: true },
 });
 
+notificationSchema.index({ loanId: 1 });
+notificationSchema.index({ studentMatricule: 1, isRead: 1 });
+
 export const Notification = mongoose.models.Notification
     || model('Notification', notificationSchema);

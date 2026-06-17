@@ -35,4 +35,9 @@ const loanSchema = new Schema({
     }
 });
 
+loanSchema.index({ studentId: 1 });
+loanSchema.index({ status: 1 });
+loanSchema.index({ status: 1, requestDate: 1 }); // pour overdue queries
+loanSchema.index({ equipmentId: 1 });
+
 export const Loan = mongoose.models.Loan || model('Loan', loanSchema);

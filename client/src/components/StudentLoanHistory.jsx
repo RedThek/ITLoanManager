@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api'
 import { LoanStatus } from '../config/constants';
 
 const STATUS_COLOR = {
@@ -14,8 +14,8 @@ export default function StudentLoanHistory() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/loans')
-            .then(r => { setLoans(r.data); setLoading(false); })
+        api.get('/loans')
+            .then(response => { setLoans(response.data); setLoading(false); })
             .catch(() => setLoading(false));
     }, []);
 

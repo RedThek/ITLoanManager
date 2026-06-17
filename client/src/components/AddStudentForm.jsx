@@ -1,6 +1,6 @@
 // client/src/components/AddStudentForm.jsx
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../services/api'
 import { UserRoles } from '../config/constants';
 
 export default function AddStudentForm({ onStudentAdded }) {
@@ -12,7 +12,7 @@ export default function AddStudentForm({ onStudentAdded }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/admin/users', {
+            const res = await api.post('/admin/users', {
                 ...formData,
                 role: UserRoles.STUDENT
             });

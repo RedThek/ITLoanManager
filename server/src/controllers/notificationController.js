@@ -1,4 +1,4 @@
-import { NotificationService } from '../services/NotificationService.js';
+import { NotificationService } from '../services/notificationService.js';
 
 // Principe S : convertit les requêtes HTTP en appels de service, rien de plus.
 

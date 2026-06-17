@@ -5,11 +5,17 @@ import axios from 'axios';
 
 export default function LoanRequest() {
     const handleRequest = async (idDuMateriel) => {
-    try {
-        const response = await axios.post('http://localhost:5000/api/loans', { equipmentId: idDuMateriel });
-        alert(response.data.message); // Notification de succès à l'étudiant
-    } catch (err) {
-        alert(err.response?.data?.error || "Erreur réseau");
-    }
-};
+        try {
+            const response = await axios.post('http://localhost:5000/api/loans', { equipmentId: idDuMateriel });
+            alert(response.data.message); // Notification de succès à l'étudiant
+        } catch (err) {
+            alert(err.response?.data?.error || "Erreur réseau");
+        }
+    };
+
+    return (
+        <button onClick={() => handleRequest(idDuMateriel)}>
+            Hello
+        </button>
+    )
 }

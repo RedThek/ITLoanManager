@@ -1,5 +1,5 @@
 import { Loan } from '../models/Loan.js';
-import { NotificationService } from './NotificationService.js';
+import { NotificationService } from './notificationService.js';
 import { LoanPolicy } from '../config/loanPolicy.js';
 import { LoanStatus } from '../config/constants.js';
 
