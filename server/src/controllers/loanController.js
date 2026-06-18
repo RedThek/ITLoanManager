@@ -1,3 +1,5 @@
+import { Loan } from '../models/index.js';
+import { LoanStatus } from '../config/constants.js';
 import { LoanService } from '../services/loanService.js';
 
 // POST /api/loans -> L'étudiant connecté crée une demande
@@ -18,7 +20,7 @@ export const updateLoanStatus = async (req, res) => {
     try {
 
         const result = await LoanService.changeStatus(req.params.id, req.body.status);
-        return res.json({ message: "Statut mis à jour avec succès.", loan: currentLoan });
+        return res.json({ message: "Statut mis à jour avec succès.", loan: result });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

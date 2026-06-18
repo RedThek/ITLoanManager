@@ -48,4 +48,19 @@ export const LoanService = {
         }
         return loan;
     },
+
+    async getLoans(userRole, studentMatricule){
+        const filter = userRole === 'ADMIN' ? {} : { studentId: studentMatricule };
+        if (!userRole || !studentMatricule) {
+            throw new Error('Informations indisponibles')
+        }
+        const loans = await Loan.find(filter).populate('equipmentId');
+        return loans;
+    },
+
+    async countPendingLoans(userRole){
+        //if (userRole !== 'ADMIN') return res.status(403).json({ error: "Privilèges insuffisants." });
+        //const count = await Loan.countDocuments({ status: LoanStatus.PENDING });
+        //return { pendingCount: count };
+    }
 };

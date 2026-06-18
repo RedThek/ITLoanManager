@@ -1,3 +1,4 @@
+import { User } from '../models/index.js'
 import { AuthService } from '../services/authService.js';
 
 export const register = async (req, res) => {
