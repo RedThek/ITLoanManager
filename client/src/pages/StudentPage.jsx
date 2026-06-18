@@ -3,8 +3,8 @@ import StudentHeader from './StudentHeader.jsx'
 import StudentTabNav from './StudentTabNav.jsx'
 import StudentLoanHistory from '../components/StudentLoanHistory';
 import api from '../services/api.js';
-import EquipmentGrid from '../components/EquipmentGrid.jsx';
-import EquipmentCard from '../components/EquipmentCard';
+//import EquipmentGrid from '../components/EquipmentGrid.jsx';
+import EquipmentCatalog from '../components/EquipmentCatalog.jsx';
 
 export default function StudentPage() {
     const [equipments, setEquipments] = useState([]);
@@ -13,8 +13,9 @@ export default function StudentPage() {
     // Fonction de récupération de l'inventaire matériel depuis le backend
     const fetchInventory = async () => {
         try {
-            const response = await api.get('/equipments');
-            setEquipments(response.data);
+            const res = await api.get('/equipments');
+            const list = res.data?.data ?? res.data ?? [];
+            setEquipments(Array.isArray(list) ? list : []);
         } catch (error) {
             console.error("Erreur lors du chargement de l'inventaire :", error);
         }
@@ -29,18 +30,12 @@ export default function StudentPage() {
             
             <StudentHeader/>
 
-            <StudentTabNav/>
+            <StudentTabNav activeTab={activeTab} onTabChange={setActiveTab} />
 
             <main style={{ marginTop: '20px' }}>
-                {activeTab === 'catalog' ? (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-                            {equipments.map((item) => (
-                                <EquipmentCard key={item.id} equipment={item} onActionSuccess={fetchInventory} />
-                            ))}
-                        </div>
-                    ) : (
-                        <StudentLoanHistory />
-                    )
+                {activeTab === 'catalog'
+                    ? <EquipmentCatalog />
+                    : <StudentLoanHistory />
                 }
             </main>
         </div>

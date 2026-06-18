@@ -61,6 +61,18 @@ export const updateUser = async (req, res) => {
     }
 };
 
+export const updateUserPassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body;
+        if (!newPassword || newPassword.length < 6)
+            return res.status(400).json({ error: 'Mot de passe invalide (min 6 caractères).' });
+        const hashed = await bcrypt.hash(newPassword, 12);
+        const user = await User.findByIdAndUpdate(req.params.id, { password: hashed }, { new: true });
+        if (!user) return res.status(404).json({ error: 'Utilisateur introuvable.' });
+        return res.json({ message: 'Mot de passe mis à jour.' });
+    } catch (error) { return res.status(500).json({ error: error.message }); }
+};
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params;
 
@@ -89,6 +101,14 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
+export const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) return res.status(404).json({ error: 'Utilisateur introuvable.' });
+        return res.json(user);
+    } catch (error) { return res.status(500).json({ error: error.message }); }
+};
+
 // Lister les emprunts en retard
 export const getOverdueLoans = async (req, res) => {
     try {
@@ -102,6 +122,22 @@ export const getOverdueLoans = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+};
+
+export const getLoanById = async (req, res) => {
+    try {
+        const loan = await Loan.findById(req.params.id).populate('equipmentId');
+        if (!loan) return res.status(404).json({ error: 'Prêt introuvable.' });
+        return res.json(loan);
+    } catch (error) { return res.status(500).json({ error: error.message }); }
+};
+
+export const deleteLoan = async (req, res) => {
+    try {
+        const deleted = await Loan.findByIdAndDelete(req.params.id);
+        if (!deleted) return res.status(404).json({ error: 'Prêt introuvable.' });
+        return res.json({ message: 'Prêt supprimé.' });
+    } catch (error) { return res.status(500).json({ error: error.message }); }
 };
 
 // Déclencher manuellement une alerte pour un prêt spécifique

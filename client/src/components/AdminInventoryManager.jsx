@@ -11,8 +11,9 @@ export default function AdminInventoryManager() {
     // Récupération initiale de l'inventaire complet
     const fetchInventory = async () => {
         try {
-            const res = await api.get('/equipments/');
-            setEquipments(res.data);
+            const res = await api.get('/equipments');
+            const list = res.data?.data ?? res.data ?? [];
+            setEquipments(Array.isArray(list) ? list : []);
         } catch (err) {
             alert("Erreur lors de la récupération du catalogue.");
             console.error(err);

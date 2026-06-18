@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addEquipmentAPI } from '../services/equipmentService';
+import { equipmentService } from '../services/equipmentService.js';
 
 export default function AddEquipmentForm({ onEquipmentAdded }) {
     const [formData, setFormData] = useState({ name: '', category: '', referenceCode: '' });
@@ -14,7 +14,7 @@ export default function AddEquipmentForm({ onEquipmentAdded }) {
         setMessage({ text: '', isError: false });
 
         try {
-            const result = await addEquipmentAPI(formData);
+            const result = await equipmentService.create(formData);
             setMessage({ text: `Équipement "${result.name}" ajouté avec succès !`, isError: false });
             setFormData({ name: '', category: '', referenceCode: '' }); // Réinitialisation du formulaire
             if (onEquipmentAdded) onEquipmentAdded(); // Déclenche un rafraîchissement de la liste

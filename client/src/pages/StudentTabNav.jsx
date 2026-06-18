@@ -1,8 +1,5 @@
-import { useState } from 'react';
 
-export default function StudentTabNav () {
-
-    const [activeTab, setActiveTab] = useState('catalog');
+export default function StudentTabNav ({ activeTab, onTabChange }) {
 
     // Style pour les futurs onglets
     const tabStyle = (tab) => ({
@@ -15,10 +12,10 @@ export default function StudentTabNav () {
 
     return(
         <div style={{ marginTop: '15px' }}>
-            <button onClick={() => setActiveTab('catalog')} style={ tabStyle('catalog') }>
+            <button onClick={() => onTabChange('catalog')} style={ tabStyle('catalog') }>
                 Catalogue
             </button>
-            <button onClick={() => setActiveTab('history')} style={ tabStyle('catalog') }>
+            <button onClick={() => onTabChange('history')} style={ tabStyle('history') }>
                 Mes Demandes
             </button>
         </div>
