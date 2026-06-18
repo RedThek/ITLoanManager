@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from 'axios';
+import api from '../services/api.js';
 
 export default function LoansTable() {
 
@@ -7,7 +7,7 @@ export default function LoansTable() {
 
     const fetchLoans = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/loans');
+            const response = await api.get('/loans');
             setLoans(response.data);
         } catch (error) {
             console.error("Erreur lors du chargement des demandes :", error);

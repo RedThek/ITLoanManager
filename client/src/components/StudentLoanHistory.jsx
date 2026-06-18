@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import api from '../services/api'
-import { LoanStatus } from '../config/constants';
+import api from '../services/api.js';
+import { LoanStatus } from '../config/constants.js';
 
 const STATUS_COLOR = {
     [LoanStatus.PENDING]:  { bg: '#FEFCBF', text: '#744210', label: '⏳ En attente' },

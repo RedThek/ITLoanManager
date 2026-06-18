@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api.js';
 
 export const equipmentService = {
     getAll:   ()           => api.get('/equipments').then(r => r.data),

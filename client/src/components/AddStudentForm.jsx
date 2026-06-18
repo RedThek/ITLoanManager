@@ -1,7 +1,7 @@
 // client/src/components/AddStudentForm.jsx
 import { useState } from 'react';
-import api from '../services/api'
-import { UserRoles } from '../config/constants';
+import api from '../services/api.js';
+import { UserRoles } from '../config/constants.js';
 
 export default function AddStudentForm({ onStudentAdded }) {
     const [formData, setFormData] = useState({ username: '', password: '', matricule: '' });

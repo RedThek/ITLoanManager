@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { notificationService } from '../services/notificationService';
+import { notificationService } from '../services/notificationService.js';
 
 // Principe S : n'affiche que le badge de comptage et gère l'ouverture
 export default function NotificationBell({ onOpen }) {

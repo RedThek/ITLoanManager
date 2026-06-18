@@ -1,11 +1,11 @@
-import React from 'react';
+//import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/LoginPage.jsx';
 import StudentPage from './pages/StudentPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
-import EditEquipmentPage from './pages/EditEquipmentPage';
-import ProtectedRoute from './components/ProtectedRoute';
-import { UserRoles } from './config/constants';
+import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
+import EditEquipmentPage from './pages/EditEquipmentPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import { UserRoles } from './config/constants.js';
 
 export default function App() {
     return (

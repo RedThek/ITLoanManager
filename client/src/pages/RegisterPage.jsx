@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserRoles } from '../config/constants';
+import { UserRoles } from '../config/constants.js';
 import api from '../services/api.js';
 
 export default function RegisterPage() {

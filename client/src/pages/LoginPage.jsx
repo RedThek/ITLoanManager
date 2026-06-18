@@ -2,12 +2,12 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, User, Loader2, BookOpen, Shield, Bell } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext';
-import { Button }               from '@/components/ui/button';
-import { Input }                from '@/components/ui/input';
-import { Label }                from '@/components/ui/label';
-import { Card, CardContent }    from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { Button }               from '@/components/ui/button.jsx';
+import { Input }                from '@/components/ui/input.jsx';
+import { Label }                from '@/components/ui/label.jsx';
+import { Card, CardContent }    from '@/components/ui/card.jsx';
+import { Alert, AlertDescription } from '@/components/ui/alert.jsx';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Données statiques — fonctionnalités affichées sur le panneau gauche

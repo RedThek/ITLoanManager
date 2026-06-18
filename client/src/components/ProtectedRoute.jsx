@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import { UserRoles } from '../config/constants';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { UserRoles } from '../config/constants.js';
 
 /**
  * Composant de protection de route basé sur l'authentification et les rôles.

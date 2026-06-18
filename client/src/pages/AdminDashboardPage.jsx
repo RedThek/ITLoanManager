@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import AdminHeader from '../components/AdminHeader';
-import AdminAlertBanner from './AdminAlertBanner';
-import AdminTabNav from '../components/AdminTabNav';
-import LoansTable from '../components/LoansTable';
-import AddEquipmentForm from '../components/AddEquipmentForm';
-//import AdminLoanRow from '../components/AdminLoanRow';
-import AdminInventoryManager from '../components/AdminInventoryManager';
-import AddStudentForm from '../components/AddStudentForm';
-import OverdueLoansTable from '../components/OverdueLoansTable';
+import AdminHeader from '../components/AdminHeader.jsx';
+import AdminAlertBanner from './AdminAlertBanner.jsx';
+import AdminTabNav from '../components/AdminTabNav.jsx';
+import LoansTable from '../components/LoansTable.jsx';
+import AddEquipmentForm from '../components/AddEquipmentForm.jsx';
+//import AdminLoanRow from '../components/AdminLoanRow.jsx';
+import AdminInventoryManager from '../components/AdminInventoryManager.jsx';
+import AddStudentForm from '../components/AddStudentForm.jsx';
+import OverdueLoansTable from '../components/OverdueLoansTable.jsx';
 import api from '../services/api.js';
 
 export default function AdminDashboardPage() {

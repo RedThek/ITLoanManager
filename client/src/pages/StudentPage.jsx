@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import StudentHeader from './StudentHeader.jsx'
 import StudentTabNav from './StudentTabNav.jsx'
-import StudentLoanHistory from '../components/StudentLoanHistory';
+import StudentLoanHistory from '../components/StudentLoanHistory.jsx';
 import api from '../services/api.js';
 //import EquipmentGrid from '../components/EquipmentGrid.jsx';
 import EquipmentCatalog from '../components/EquipmentCatalog.jsx';

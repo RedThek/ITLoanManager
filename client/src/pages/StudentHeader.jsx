@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import NotificationBell from '../components/NotificationBell';
+import { AuthContext } from '../context/AuthContext.jsx';
+import NotificationBell from '../components/NotificationBell.jsx';
 
 export default function StudentHeader() {
 

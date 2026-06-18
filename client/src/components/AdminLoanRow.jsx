@@ -1,6 +1,6 @@
 //import React from 'react';
-import api from '../services/api'
-import { LoanStatus } from '../config/constants';
+import api from '../services/api.js';
+import { LoanStatus } from '../config/constants.js';
 
 export default function AdminLoanRow({ loan, onStatusChange }) {
     const handleAction = async (targetStatus) => {

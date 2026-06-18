@@ -5,17 +5,17 @@ import {
     Search, SlidersHorizontal, Monitor, Wifi, Server,
     HardDrive, Package, Loader2, X, CheckCircle2, AlertCircle, Clock
 } from 'lucide-react';
-import { AuthContext }      from '../context/AuthContext';
-import { EquipmentStatus }  from '../config/constants';
-import api                  from '../services/api';
-import { Button }           from '@/components/ui/button';
-import { Input }            from '@/components/ui/input';
-import { Badge }            from '@/components/ui/badge';
+import { AuthContext }      from '../context/AuthContext.jsx';
+import { EquipmentStatus }  from '../config/constants.js';
+import api                  from '../services/api.js';
+import { Button }           from '@/components/ui/button.jsx';
+import { Input }            from '@/components/ui/input.jsx';
+import { Badge }            from '@/components/ui/badge.jsx';
 import {
     Card, CardContent, CardHeader, CardTitle, CardFooter
-} from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { cn } from '@/lib/utils';
+} from '@/components/ui/card.jsx';
+import { Alert, AlertDescription } from '@/components/ui/alert.jsx';
+import { cn } from '@/lib/utils.js';
 
 // ─────────────────────────────────────────────────────────────
 // Constantes de configuration
