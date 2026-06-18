@@ -1,7 +1,7 @@
 //import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage.jsx';
-import StudentPage from './pages/StudentPage';
+import StudentPage from './pages/StudentPage.jsx';
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
 import EditEquipmentPage from './pages/EditEquipmentPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
