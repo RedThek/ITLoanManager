@@ -40,8 +40,6 @@ app.use(
 app.use(compression());
 app.use(helmet());
 
-connectDB();
-
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/equipments', equipmentRoutes);
@@ -49,14 +47,22 @@ app.use('/api/loans', loanRoutes);
 //app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 
-const PORT = process.env.PORT || 5000 || 10000;
-
 app.get('/api/diagnostic', async (req, res) => {
     return res.json({ status: 'OK', database: 'MongoDB' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Serveur actif et à l'écoute sur le port : ${PORT}`);
+app.get('/', (req, res) => {
+    res.json({ status: 'IT Loan Manager API', docs: '/api/diagnostic' });
 });
 
-startLoanMonitoringJob();
+const PORT = process.env.PORT || 5000 || 10000;
+
+async function start() {
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`Serveur actif et à l'écoute sur le port : ${PORT}`);
+    });
+    startLoanMonitoringJob();
+}
+
+start();
