@@ -49,7 +49,7 @@ app.use('/api/loans', loanRoutes);
 //app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000 || 10000;
 
 app.get('/api/diagnostic', async (req, res) => {
     return res.json({ status: 'OK', database: 'MongoDB' });
