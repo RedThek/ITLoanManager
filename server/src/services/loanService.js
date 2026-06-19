@@ -50,10 +50,9 @@ export const LoanService = {
     },
 
     async getLoans(userRole, studentMatricule){
+        if (!userRole) throw new Error('Informations indisponibles');
+        if (userRole !== 'ADMIN' && !studentMatricule) throw new Error('Informations indisponibles');
         const filter = userRole === 'ADMIN' ? {} : { studentId: studentMatricule };
-        if (!userRole || !studentMatricule) {
-            throw new Error('Informations indisponibles')
-        }
         const loans = await Loan.find(filter).populate('equipmentId');
         return loans;
     },

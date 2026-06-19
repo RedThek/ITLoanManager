@@ -9,7 +9,7 @@ import { connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import equipmentRoutes from './routes/equipmentRoutes.js';
 import loanRoutes from './routes/loanRoutes.js';
-import userRoutes from './routes/userRoutes.js';
+//import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import { startLoanMonitoringJob } from './jobs/loanMonitoringJob.js';
@@ -46,7 +46,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/equipments', equipmentRoutes);
 app.use('/api/loans', loanRoutes);
-app.use('/api/users', userRoutes);
+//app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000;

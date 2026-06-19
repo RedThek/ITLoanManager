@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { User, Equipment, Loan } from '../models/index.js';
 import { EquipmentStatus, LoanStatus, UserRoles } from '../config/constants.js';
 import { LoanMonitoringService } from '../services/loanMonitoringService.js';
@@ -80,7 +81,7 @@ export const deleteUser = async (req, res) => {
         const user = await User.findById(id);
         if (!user) return res.status(404).json({ error: 'Utilisateur introuvable.' });
 
-        await Loan.deleteMany({ studentId: user._id });
+        await Loan.deleteMany({ studentId: user.matricule });
         await User.deleteOne({ _id: user._id });
 
         return res.json({ message: `L'utilisateur [${user.username}] a été supprimé du système.` });

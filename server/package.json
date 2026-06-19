@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "seed": "node src/scripts/seed.js"
   },
+  "engines": {
+  "node": ">=18.0.0"
+  },
   "keywords": [],
-  "author": "",
+  "author": "mola",
   "license": "ISC",
   "type": "module",
   "dependencies": {

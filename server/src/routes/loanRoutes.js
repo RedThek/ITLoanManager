@@ -1,6 +1,6 @@
 import express from 'express';
 import { createLoanRequest, updateLoanStatus, getAllLoans, getPendingLoansCount } from '../controllers/loanController.js';
-import { authenticateToken } from '../middlewares/authMiddleware.js';
+import { authenticateToken, requireRole } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -8,6 +8,6 @@ const router = express.Router();
 router.post('/', authenticateToken, createLoanRequest);
 router.get('/', authenticateToken, getAllLoans);
 router.get('/pending-count', authenticateToken, getPendingLoansCount);
-router.patch('/:id/status', authenticateToken, updateLoanStatus);
+router.patch('/:id/status', authenticateToken, requireRole('ADMIN'), updateLoanStatus);
 
 export default router;
