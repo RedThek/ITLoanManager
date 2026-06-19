@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { 
     getAllUsers, 
     getLoanById,
@@ -18,8 +19,16 @@ import { requireAdmin } from '../middlewares/roleMiddleware.js';
 
 const router = express.Router();
 
+const adminRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limite chaque IP à 100 requêtes par fenêtre
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // Application du chaînage de middlewares : Authentification puis Contrôle du rôle Admin
 router.use(authenticateToken, requireAdmin);
+router.use(adminRateLimiter);
 
 router.get('/users', getAllUsers); // Récupération de tous les utilisateurs enregistrés
 router.get('/loans/overdue', getOverdueLoans);
