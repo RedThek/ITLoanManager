@@ -29,6 +29,9 @@ export const logout = (req, res) => {
 export const reset = async (req, res) => {
     try {
         const { matricule, newPassword } = req.body;
+        if (req.user.matricule !== req.body.matricule) {
+            return res.status(403).json({ error: "Action non autorisée." });
+        }
         if (!matricule || !newPassword)
             return res.status(400).json({ error: 'Matricule et nouveau mot de passe requis.' });
         if (newPassword.length < 6)

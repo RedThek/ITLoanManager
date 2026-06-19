@@ -10,7 +10,7 @@ export const createLoanRequest = async (req, res) => {
 
         return res.json(result);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -22,7 +22,7 @@ export const updateLoanStatus = async (req, res) => {
         const result = await LoanService.changeStatus(req.params.id, req.body.status);
         return res.json({ message: "Statut mis à jour avec succès.", loan: result });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -33,7 +33,7 @@ export const getAllLoans = async (req, res) => {
         const loans = await Loan.find(filter).populate('equipmentId');
         return res.json(loans);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -43,6 +43,6 @@ export const getPendingLoansCount = async (req, res) => {
         const count = await Loan.countDocuments({ status: LoanStatus.PENDING });
         return res.json({ pendingCount: count });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ error: error.message });
     }
 };

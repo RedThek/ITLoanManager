@@ -5,8 +5,11 @@ import { UserRoles } from '../config/constants.js';
 
 export const AuthService = {
     async registerUser({ username, password, role, matricule }) {
-        if (!username || !password || !role)
-            throw new Error('Champs requis manquants.');
+        // const role = UserRoles.STUDENT;
+        if (!username || !password) throw new Error('Champs requis manquants.');
+        if (!matricule) throw new Error('Matricule obligatoire pour un étudiant.');
+        // if (!username || !password || !role)
+        //    throw new Error('Champs requis manquants.');
         if (!Object.values(UserRoles).includes(role))
             throw new Error('Rôle invalide.');
         if (role === UserRoles.STUDENT && !matricule)
