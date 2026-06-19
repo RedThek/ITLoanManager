@@ -56,8 +56,7 @@ app.get('/api/diagnostic', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Serveur actif et à l'écoute sur : http://localhost:${PORT}`);
-    console.log(`Testez de connectivité via GET http://localhost:${PORT}/api/diagnostic`);
+    console.log(`Serveur actif et à l'écoute sur le port : ${PORT}`);
 });
 
 startLoanMonitoringJob();
